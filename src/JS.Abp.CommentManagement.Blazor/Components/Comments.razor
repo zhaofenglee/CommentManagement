@@ -1,0 +1,134 @@
+@using global::JS.Abp.CommentManagement.Comments
+@using global::JS.Abp.CommentManagement.Localization
+@using global::JS.Abp.CommentManagement.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Components.Web
+@using Blazorise
+@using Blazorise.Components
+@using Blazorise.DataGrid
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using global::JS.Abp.CommentManagement.Permissions
+@using Microsoft.AspNetCore.Components
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.Http.Client
+@inherits CommentManagementComponentBase
+@inject ICommentsAppService CommentsAppService
+@inject IUiMessageService UiMessageService
+@inject IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider
+@inject NavigationManager NavigationManager
+@using Blazorise.Markdown
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <div Form="CreateComment">
+            <Markdown Value="@NewComment.Text" ValueChanged="@OnMarkdownValueChanged"/>
+            <Fields>
+                <Field Flex="Flex.JustifyContent.End">
+                    <SubmitButton   Form="CreateComment" Clicked="CreateCommentAsync">@L["Submit"]</SubmitButton>  
+                </Field>
+            </Fields>
+        </div>
+       
+        <DataGrid TItem="CommentWithUserDto"
+                  Data="CommentList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Sortable="false"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                @* <DataGridEntityActionsColumn TItem="CommentDto" @ref="@EntityActionsColumn"> *@
+                @*     <DisplayTemplate> *@
+                @*         <EntityActions TItem="CommentDto" EntityActionsColumn="@EntityActionsColumn"> *@
+                @*             <EntityAction TItem="CommentDto" *@
+                @*                           Visible="@CanEditComment" *@
+                @*                           Clicked="async () => await OpenEditCommentModalAsync(context)" *@
+                @*                           Text="@L["Edit"]"></EntityAction> *@
+                @*             <EntityAction TItem="CommentDto" *@
+                @*                           Visible="@CanDeleteComment" *@
+                @*                           Clicked="() => DeleteCommentAsync(context)" *@
+                @*                           ConfirmationMessage="@(()=> L["DeleteConfirmationMessage"])" *@
+                @*                           Text="@L["Delete"]"></EntityAction> *@
+                @*         </EntityActions> *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridEntityActionsColumn> *@
+
+                @* <DataGridColumn TItem="CommentDto" *@
+                @*         Field="EntityType" *@
+                @*         Caption="@L["EntityType"]"> *@
+                @* </DataGridColumn> *@
+                @* *@
+                @* <DataGridColumn TItem="CommentDto" *@
+                @*         Field="EntityId" *@
+                @*         Caption="@L["EntityId"]"> *@
+                @* </DataGridColumn> *@
+
+                <DataGridColumn TItem="CommentWithUserDto">
+                    <DisplayTemplate>
+                        @{
+                            <Row>
+                                <Column>
+                                    <h6 style="text-align: left">@context.Author.Name</h6>
+                                </Column>
+                                <Column>
+                                    <h6 style="text-align: left">@context.CreationTime</h6>
+                                </Column>
+
+                            </Row>
+
+                            <CommentText Text="@context.Text"></CommentText>
+                            @if(CurrentUser.Id==context.Author.Id)
+                            {
+                                <Fields>
+                                    <Field Flex="Flex.JustifyContent.End">
+                                        <Button Size="Size.Small"  Color="Color.Info" Clicked="()=>OpenEditCommentModalAsync(context)">@L["Edit"]</Button>  
+                                    </Field>
+                                </Fields>
+                            }
+                            @* RichTextEdit editor =new RichTextEdit(); *@
+                            @* async ()=>(await editor.SetHtmlAsync(Markdig.Markdown.ToHtml("1234" ?? string.Empty))); *@
+                            @* <RichTextEdit @ref="editor" Theme="RichTextEditTheme.Bubble" ReadOnly="true"/> *@
+                        }
+
+
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditCommentModal" Closing="@EditCommentModal.CancelClosingModalWhenFocusLost">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditCommentForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditCommentModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                 <Markdown Value="@EditingComment.Text" ValueChanged="@OnMarkdownEditValueChanged"/>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditCommentModalAsync">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateCommentForm" Clicked="UpdateCommentAsync" />
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

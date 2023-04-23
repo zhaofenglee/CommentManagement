@@ -1,0 +1,26 @@
+﻿@page "/"
+@inherits CommentManagementComponentBase
+@using JS.Abp.CommentManagement.Blazor.Components
+
+<div class="container">
+    <div class="p-5 text-center">
+
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <a class="btn btn-primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a>
+        }
+        else
+        {
+          
+            <strong>Claims</strong><br />
+            @foreach (var claims in CurrentUser.GetAllClaims())
+            {
+                <p>@($"{claims.Type}={claims.Value}")</p>
+            }
+        }
+    </div>
+</div>
+@if (CurrentUser.IsAuthenticated)
+{
+    <Comments EntityId="Guid.NewGuid()"></Comments>
+}

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>JS.Abp.CommentManagement</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="7.1.1" />
+    <PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="7.1.1" />
+    <ProjectReference Include="..\JS.Abp.CommentManagement.Domain.Shared\JS.Abp.CommentManagement.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

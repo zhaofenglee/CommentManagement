@@ -1,0 +1,75 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using JS.Abp.CommentManagement.Permissions
+@using JS.Abp.CommentManagement.Web.Pages.CommentManagement.Comments
+@using JS.Abp.CommentManagement.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using JS.Abp.CommentManagement.Localization
+@inject IHtmlLocalizer<CommentManagementResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Comments"].Value;
+    PageLayout.Content.MenuItemName = CommentManagementMenus.Comments;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/CommentManagement/Comments/index.js" />
+}
+
+@section content_toolbar {
+    <abp-button id="ExportToExcelButton" text="@L["ExportToExcel"].Value" icon="download" size="Small" button-type="Primary" />
+    @if (await Authorization.IsGrantedAsync(CommentManagementPermissions.Comments.Create))
+    {
+        <abp-button id="NewCommentButton" text="@L["NewComment"].Value" icon="plus" size="Small" button-type="Primary" />
+    }
+}
+
+<abp-card>
+    <abp-card-body>
+		<abp-row class="mb-3">
+            <abp-column size-md="_12">
+                <form id="SearchForm" autocomplete="off">
+                    <div class="input-group">
+                        <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
+                        <abp-button button-type="Primary" type="submit" icon="search"/>
+                    </div>
+                </form>
+            </abp-column>
+            <abp-column size-md="_12" class="mt-3">
+                <a href="javascript:;" id="AdvancedFilterSectionToggler" class="text-decoration-none">@L["SeeAdvancedFilters"]</a>
+            </abp-column>
+        </abp-row>
+
+        <abp-row id="AdvancedFilterSection" style="display: none;">
+            <abp-column size="_3">
+                <abp-input asp-for="EntityTypeFilter" label="@L["EntityType"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="EntityIdFilter" label="@L["EntityId"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="TextFilter" label="@L["Text"].Value" />
+            </abp-column>
+            <abp-column size="_3">
+                <abp-input asp-for="RepliedCommentIdFilter" label="@L["RepliedCommentId"].Value" />
+            </abp-column>
+        </abp-row>
+
+        <abp-table striped-rows="true" id="CommentsTable">
+            <thead>
+				<tr>
+					<th>@L["Actions"]</th>
+					<th>@L["EntityType"]</th>
+					<th>@L["EntityId"]</th>
+					<th>@L["Text"]</th>
+					<th>@L["RepliedCommentId"]</th>
+
+				</tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

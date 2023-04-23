@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "JS.Abp.CommentManagement": {
+      "path": "JS.Abp.CommentManagement.abpmdl.json"
+    }
+  }
+}

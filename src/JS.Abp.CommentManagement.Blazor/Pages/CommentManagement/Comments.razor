@@ -1,0 +1,237 @@
+@page "/CommentManagement/Comments"
+
+@attribute [Authorize(CommentManagementPermissions.Comments.Default)]
+@using global::JS.Abp.CommentManagement.Comments
+@using global::JS.Abp.CommentManagement.Localization
+@using global::JS.Abp.CommentManagement.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Components.Web
+@using Blazorise
+@using Blazorise.Components
+@using Blazorise.DataGrid
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using global::JS.Abp.CommentManagement.Permissions
+@using Microsoft.AspNetCore.Components
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.Http.Client
+@inherits CommentManagementComponentBase
+@inject ICommentsAppService CommentsAppService
+@inject IUiMessageService UiMessageService
+@inject IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider
+@inject NavigationManager NavigationManager
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Comments"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="CommentSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="CommentSearchForm" Clicked="GetCommentsAsync">
+                        <Icon Name="IconName.Search" Class="me-1"></Icon>@L["Search"]
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="CommentWithUserDto"
+                  Data="CommentList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="CommentWithUserDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="CommentWithUserDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="CommentWithUserDto"
+                                          Visible="@CanEditComment"
+                                          Clicked="async () => await OpenEditCommentModalAsync(context)"
+                                          Text="@L["Edit"]"></EntityAction>
+                            <EntityAction TItem="CommentWithUserDto"
+                                          Visible="@CanDeleteComment"
+                                          Clicked="() => DeleteCommentAsync(context)"
+                                          ConfirmationMessage="@(()=> L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]"></EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+               
+              <DataGridColumn TItem="CommentWithUserDto"
+                      Field="EntityType"
+                      Caption="@L["EntityType"]">
+              </DataGridColumn>
+
+              <DataGridColumn TItem="CommentWithUserDto"
+                      Field="EntityId"
+                      Caption="@L["EntityId"]">
+              </DataGridColumn>
+
+              <DataGridColumn TItem="CommentWithUserDto"
+                      Field="Text"
+                      Caption="@L["Text"]">
+              </DataGridColumn>
+
+
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateCommentModal" Closing="@CreateCommentModal.CancelClosingModalWhenFocusLost">
+    <ModalContent Centered="true">
+        <Form id="CreateCommentForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewComment"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateCommentModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewCommentValidations"
+                            Mode="ValidationMode.Auto"
+                            Model="@NewComment"
+                            ValidateOnLoad="false">
+                     
+                    
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["EntityType"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewComment.EntityType" MaxLength="CommentConsts.EntityTypeMaxLength">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["EntityId"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewComment.EntityId" MaxLength="CommentConsts.EntityIdMaxLength">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Text"]</FieldLabel>
+                            <MemoEdit @bind-Text="@NewComment.Text" >
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+
+
+
+
+                    
+                    
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateCommentModalAsync">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateCommentForm" Clicked="CreateCommentAsync" />
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditCommentModal" Closing="@EditCommentModal.CancelClosingModalWhenFocusLost">
+    <ModalContent Centered="true">
+        <Form id="EditCommentForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditCommentModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingCommentValidations"
+                            Mode="ValidationMode.Auto"
+                            Model="@EditingComment"
+                            ValidateOnLoad="false">
+                     
+                    
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["EntityType"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingComment.EntityType" MaxLength="CommentConsts.EntityTypeMaxLength">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["EntityId"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingComment.EntityId" MaxLength="CommentConsts.EntityIdMaxLength">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Text"]</FieldLabel>
+                            <MemoEdit @bind-Text="@EditingComment.Text" >
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+
+
+
+
+                    
+                    
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditCommentModalAsync">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateCommentForm" Clicked="UpdateCommentAsync" />
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

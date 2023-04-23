@@ -1,0 +1,111 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "JS.Abp.CommentManagement.Domain.Shared": {
+      "path": "src/JS.Abp.CommentManagement.Domain.Shared/JS.Abp.CommentManagement.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.Domain": {
+      "path": "src/JS.Abp.CommentManagement.Domain/JS.Abp.CommentManagement.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.Application.Contracts": {
+      "path": "src/JS.Abp.CommentManagement.Application.Contracts/JS.Abp.CommentManagement.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.Application": {
+      "path": "src/JS.Abp.CommentManagement.Application/JS.Abp.CommentManagement.Application.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.EntityFrameworkCore": {
+      "path": "src/JS.Abp.CommentManagement.EntityFrameworkCore/JS.Abp.CommentManagement.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.MongoDB": {
+      "path": "src/JS.Abp.CommentManagement.MongoDB/JS.Abp.CommentManagement.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.HttpApi": {
+      "path": "src/JS.Abp.CommentManagement.HttpApi/JS.Abp.CommentManagement.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.HttpApi.Client": {
+      "path": "src/JS.Abp.CommentManagement.HttpApi.Client/JS.Abp.CommentManagement.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.TestBase": {
+      "path": "test/JS.Abp.CommentManagement.TestBase/JS.Abp.CommentManagement.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "JS.Abp.CommentManagement.EntityFrameworkCore.Tests": {
+      "path": "test/JS.Abp.CommentManagement.EntityFrameworkCore.Tests/JS.Abp.CommentManagement.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "JS.Abp.CommentManagement.MongoDB.Tests": {
+      "path": "test/JS.Abp.CommentManagement.MongoDB.Tests/JS.Abp.CommentManagement.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "JS.Abp.CommentManagement.Domain.Tests": {
+      "path": "test/JS.Abp.CommentManagement.Domain.Tests/JS.Abp.CommentManagement.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "JS.Abp.CommentManagement.Application.Tests": {
+      "path": "test/JS.Abp.CommentManagement.Application.Tests/JS.Abp.CommentManagement.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "JS.Abp.CommentManagement.HttpApi.Host": {
+      "path": "host/JS.Abp.CommentManagement.HttpApi.Host/JS.Abp.CommentManagement.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "JS.Abp.CommentManagement.Web": {
+      "path": "src/JS.Abp.CommentManagement.Web/JS.Abp.CommentManagement.Web.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/JS.Abp.CommentManagement.HttpApi.Client.ConsoleTestApp/JS.Abp.CommentManagement.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "JS.Abp.CommentManagement.Web.Host": {
+      "path": "host/JS.Abp.CommentManagement.Web.Host/JS.Abp.CommentManagement.Web.Host.abppkg.json",
+      "folder": "host"
+    },
+    "JS.Abp.CommentManagement.AuthServer": {
+      "path": "host/JS.Abp.CommentManagement.AuthServer/JS.Abp.CommentManagement.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "JS.Abp.CommentManagement.Host.Shared": {
+      "path": "host/JS.Abp.CommentManagement.Host.Shared/JS.Abp.CommentManagement.Host.Shared.abppkg.json",
+      "folder": "host"
+    },
+    "JS.Abp.CommentManagement.Web.Unified": {
+      "path": "host/JS.Abp.CommentManagement.Web.Unified/JS.Abp.CommentManagement.Web.Unified.abppkg.json",
+      "folder": "host"
+    },
+    "JS.Abp.CommentManagement.Blazor": {
+      "path": "src/JS.Abp.CommentManagement.Blazor/JS.Abp.CommentManagement.Blazor.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.Blazor.Host": {
+      "path": "host/JS.Abp.CommentManagement.Blazor.Host/JS.Abp.CommentManagement.Blazor.Host.abppkg.json",
+      "folder": "host"
+    },
+    "JS.Abp.CommentManagement.Blazor.Server": {
+      "path": "src/JS.Abp.CommentManagement.Blazor.Server/JS.Abp.CommentManagement.Blazor.Server.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.Blazor.WebAssembly": {
+      "path": "src/JS.Abp.CommentManagement.Blazor.WebAssembly/JS.Abp.CommentManagement.Blazor.WebAssembly.abppkg.json",
+      "folder": "src"
+    },
+    "JS.Abp.CommentManagement.Blazor.Server.Host": {
+      "path": "host/JS.Abp.CommentManagement.Blazor.Server.Host/JS.Abp.CommentManagement.Blazor.Server.Host.abppkg.json",
+      "folder": "host"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using JS.Abp.CommentManagement.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using JS.Abp.CommentManagement.Web.Pages.CommentManagement.Comments
+@using JS.Abp.CommentManagement.Comments;
+@using System.Globalization
+@inject IHtmlLocalizer<CommentManagementResource> L
+@model CreateModalModel
+@{
+    Layout = null;
+}
+
+<form data-ajaxForm="true" asp-page="/CommentManagement/Comments/CreateModal" autocomplete="off">
+    <abp-modal id="CommentCreateModal">
+        <abp-modal-header title="@L["NewComment"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+                    
+            <abp-input asp-for="Comment.EntityType"  />
+
+            <abp-input asp-for="Comment.EntityId"  />
+
+            <abp-input asp-for="Comment.Text"  />
+
+            <abp-input asp-for="Comment.RepliedCommentId"  />
+
+                    
+                
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

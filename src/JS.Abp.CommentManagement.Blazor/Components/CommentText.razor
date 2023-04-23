@@ -1,0 +1,21 @@
+@using Blazorise.RichTextEdit
+<RichTextEdit @ref="editor" Theme="RichTextEditTheme.Bubble" ReadOnly="true"/>
+
+@code {
+    private RichTextEdit? editor;
+    [Parameter] public string Text { get; set; }
+    private string html = "Hello world.";
+    private bool isSet;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!isSet && editor != null)
+        {
+            isSet = true;
+            await editor.SetHtmlAsync(Markdig.Markdown.ToHtml(Text ?? string.Empty));
+            //await editor.SetHtmlAsync(html);
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

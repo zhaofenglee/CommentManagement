@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@j-s.Abp/comment-management": [
+        "projects/comment-management/src/public-api.ts"
+      ],
+      "@j-s.Abp/comment-management/config": [
+        "projects/comment-management/config/src/public-api.ts"
+      ],
+      "@proxy": ["projects/comment-management/src/lib/proxy/index.ts"],
+      "@proxy/*": ["projects/comment-management/src/lib/proxy/*"]
+    }
+  }
+}
